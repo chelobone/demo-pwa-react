@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Demo PWA",
+  "name": "Aplicación web que funciona online y offline.",
   "icons": [
     {
       "src": "favicon.ico",
