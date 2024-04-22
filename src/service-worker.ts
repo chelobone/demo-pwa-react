@@ -81,6 +81,9 @@ self.addEventListener('message', (event) => {
 
 const CACHE_NAME = "cache_sample";
 const urlsToCache = [".",
+"/static/media/",
+"/static/css/",
+"/static/js/",
 "index.html", 
 "offline.html",
 "favicon.ico",
