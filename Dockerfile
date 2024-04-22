@@ -15,6 +15,7 @@ COPY /src /app/src
 COPY /public /app/public
 COPY package.json /app/package.json
 COPY tsconfig.json /app/tsconfig.json
+RUN npm i -D react-router-dom@latest
 RUN npm run build
 
 # serve

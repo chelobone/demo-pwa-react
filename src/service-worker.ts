@@ -85,7 +85,8 @@ const urlsToCache = [".",
 "offline.html",
 "favicon.ico",
 "logo192.png",
-"logo512.png"];
+"logo512.png",
+"logo.svg"];
 const version = "v0.0.1";
 //install sw at first time
 //place to cache assets to speed up the loading time of web page
