@@ -123,7 +123,7 @@ self.addEventListener("activate", (event: any) => {
 });
 
 const putInCache = async (request: any, response: any) => {
-  const cache = await caches.open("v1");
+  const cache = await caches.open(version + CACHE_NAME);
   await cache.put(request, response);
 };
 
@@ -164,6 +164,7 @@ const cacheFirst = async ({ request, fallbackUrl }: any) => {
 
 //listen for requests
 self.addEventListener("fetch", (event: any) => {
+  console.log(event);
   event.respondWith(
     cacheFirst({
       request: event.request,
