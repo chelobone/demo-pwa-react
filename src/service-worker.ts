@@ -80,7 +80,7 @@ self.addEventListener('message', (event) => {
 // Any other custom service worker logic can go here.
 
 const CACHE_NAME = "cache_sample";
-const urlsToCache = ["./",
+const urlsToCache = [".",
 "/static/media/",
 "/static/css/",
 "/static/css/App.css",
@@ -121,6 +121,7 @@ self.addEventListener("activate", (event: any) => {
     )
   );
 });
+
 //listen for requests
 self.addEventListener("fetch", (event: any) => {
   event.respondWith(
