@@ -3,7 +3,6 @@ import logo from '../logo.svg';
 import '../App.css';
 
 const Home = () => {
-    console.log(process.env);
     return (
         <div className="App">
       <header className="App-header">

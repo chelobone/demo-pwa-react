@@ -6,7 +6,7 @@ import Layout from './layout/Layout';
 import NoPage from './layout/NoPage';
 
 const App = () => {
-  console.log(process.env);
+  console.log(process.env.PUBLIC_URL);
   return (
     <BrowserRouter>
       <Routes>
