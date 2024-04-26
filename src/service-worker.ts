@@ -82,7 +82,10 @@ self.addEventListener('message', (event) => {
 
 const CACHE_NAME = "demo_pwa";
 
-const STATIC_ASSETS = ["/offline.html"];
+const STATIC_ASSETS = ["/offline.html",
+  "logo192.png",
+  "logo512.png"
+];
 
 let CACHE_ASSETS = STATIC_ASSETS.concat(JSON.parse('HASHURLS'));
 
