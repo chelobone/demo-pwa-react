@@ -98,7 +98,13 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        cache.addAll(CACHE_ASSETS);
+        CACHE_ASSETS.forEach(c => {
+          try {
+            cache.add(c);
+          } catch (e) {
+            console.log(`No se pudo agregar el archivo ${c} al caché`)
+          }
+        });
       }
       )
   );
