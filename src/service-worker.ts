@@ -82,17 +82,11 @@ self.addEventListener('message', (event) => {
 
 const CACHE_NAME = "cache_sample";
 
-const STATIC_ASSETS = [
-  "index.html",
-  "offline.html",
-  "favicon.ico",
-  "logo192.png",
-  "logo512.png",
-  "logo.svg"];
+const STATIC_ASSETS = ["/offline.html"];
 
-console.log(STATIC_ASSETS.concat(JSON.parse('%HASHURLS%')))
-let CACHE_ASSETS: string[] = STATIC_ASSETS.concat(JSON.parse('%HASHURLS%'));
-CACHE_ASSETS = Array.from(CACHE_ASSETS);
+let CACHE_ASSETS = STATIC_ASSETS.concat(JSON.parse('HASHURLS'));
+
+
 const version = "v0.0.1";
 //install sw at first time
 //place to cache assets to speed up the loading time of web page
@@ -102,7 +96,7 @@ self.addEventListener("install", (event: any) => {
     caches.open(version + CACHE_NAME).then((cache) => {
       console.log("opened cache");
       console.log(cache);
-      return cache.addAll(CACHE_ASSETS);
+      return cache.addAll(STATIC_ASSETS);
     })
   );
 });
