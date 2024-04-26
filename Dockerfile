@@ -13,6 +13,7 @@ COPY --from=module-install-stage /app/node_modules/ /app/node_modules
 WORKDIR /app
 COPY /src /app/src
 COPY /public /app/public
+COPY /scripts /app/scripts
 COPY package.json /app/package.json
 COPY tsconfig.json /app/tsconfig.json
 RUN npm i -D react-router-dom@latest
