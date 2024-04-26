@@ -96,7 +96,7 @@ self.addEventListener("install", (event: any) => {
     caches.open(version + CACHE_NAME).then((cache) => {
       console.log("opened cache");
       console.log(cache);
-      return cache.addAll(STATIC_ASSETS);
+      return cache.addAll(CACHE_ASSETS);
     })
   );
 });
