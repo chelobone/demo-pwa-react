@@ -30,7 +30,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "update-service-worker": "node scripts/update-service-worker.js",
+    "build": "react-scripts build && npm run update-service-worker",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

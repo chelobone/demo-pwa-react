@@ -80,17 +80,18 @@ self.addEventListener('message', (event) => {
 // Any other custom service worker logic can go here.
 
 const CACHE_NAME = "cache_sample";
-const urlsToCache = [".",
-  "/static/media/",
-  "/static/css/",
-  "/static/css/App.css",
-  "/static/js/",
+
+const STATIC_ASSETS = [
   "index.html",
   "offline.html",
   "favicon.ico",
   "logo192.png",
   "logo512.png",
   "logo.svg"];
+
+let CACHE_ASSETS: string[] = STATIC_ASSETS.concat(JSON.parse('%HASHURLS%'));
+
+CACHE_ASSETS = Array.from(CACHE_ASSETS);
 const version = "v0.0.1";
 //install sw at first time
 //place to cache assets to speed up the loading time of web page
@@ -99,7 +100,8 @@ self.addEventListener("install", (event: any) => {
   event.waitUntil(
     caches.open(version + CACHE_NAME).then((cache) => {
       console.log("opened cache");
-      return cache.addAll(urlsToCache);
+      console.log(cache);
+      return cache.addAll(STATIC_ASSETS);
     })
   );
 });
@@ -115,6 +117,7 @@ self.addEventListener("activate", (event: any) => {
             return cacheName.indexOf(version) !== 0;
           })
           .map(function (cachName) {
+            console.log(cachName);
             return caches.delete(cachName);
           })
       )
