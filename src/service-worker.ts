@@ -91,8 +91,7 @@ const STATIC_ASSETS = [
   "logo.svg"];
 
 console.log(STATIC_ASSETS.concat(JSON.parse('%HASHURLS%')))
-let CACHE_ASSETS: string[] = STATIC_ASSETS.concat('%HASHURLS%');
-
+let CACHE_ASSETS: string[] = STATIC_ASSETS.concat(JSON.parse('%HASHURLS%'));
 CACHE_ASSETS = Array.from(CACHE_ASSETS);
 const version = "v0.0.1";
 //install sw at first time
