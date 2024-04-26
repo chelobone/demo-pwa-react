@@ -8,6 +8,7 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
+import { json } from 'stream/consumers';
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
@@ -89,7 +90,8 @@ const STATIC_ASSETS = [
   "logo512.png",
   "logo.svg"];
 
-let CACHE_ASSETS: string[] = STATIC_ASSETS.concat(JSON.parse('%HASHURLS%'));
+console.log(STATIC_ASSETS.concat(JSON.parse('%HASHURLS%')))
+let CACHE_ASSETS: string[] = STATIC_ASSETS.concat('%HASHURLS%');
 
 CACHE_ASSETS = Array.from(CACHE_ASSETS);
 const version = "v0.0.1";
@@ -101,7 +103,7 @@ self.addEventListener("install", (event: any) => {
     caches.open(version + CACHE_NAME).then((cache) => {
       console.log("opened cache");
       console.log(cache);
-      return cache.addAll(STATIC_ASSETS);
+      return cache.addAll(CACHE_ASSETS);
     })
   );
 });
