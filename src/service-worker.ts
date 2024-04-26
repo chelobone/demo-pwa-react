@@ -93,42 +93,54 @@ let CACHE_ASSETS = STATIC_ASSETS.concat(JSON.parse('HASHURLS'));
 
 console.log(CACHE_ASSETS);
 
-self.addEventListener('install', event => {
-  console.log("add to cache");
+self.addEventListener('install', function(event) {
+  // The ServiceWorker.skipWaiting() method is a life saver.
+  // It ensures that any new versions of a service worker will
+  // take over the page and become activated immediately.
+  // https://bitsofco.de/what-self-skipwaiting-does-to-the-service-worker-lifecycle/
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        CACHE_ASSETS.forEach(c => {
-          try {
-            cache.add(c);
-          } catch (e) {
-            console.log(`No se pudo agregar el archivo ${c} al caché`)
-          }
-        });
-      }
-      )
-  );
-});
-
-self.addEventListener('activate', event => {
-  console.log("activate cache);")
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cache => {
-          if (cache !== CACHE_NAME) {
-            caches.delete(cache);
-          }
-        })
-      )
+    .then(function(cache) {
+      console.log('Opened cache', CACHE_NAME)
+      return cache.addAll(CACHE_ASSETS)
     })
   )
-});
+})
 
-self.addEventListener('fetch', event => {
-  console.log("fetch cache");
+self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request)
-      .then(response => response || fetch(event.request))
-  );
-});
+    .then(function(response) {
+      if (response) {
+        console.log('Found ', event.request.url, ' in cache')
+        return response
+      }
+      return fetch(event.request).then(function(response) {
+        if(!response || response.status !== 200 || response.type !== 'basic') {
+          return response
+        }
+        var responseToCache = response.clone()
+        caches.open(CACHE_NAME)
+        .then(function(cache) {
+          cache.put(event.request, responseToCache)
+        })
+        return response
+      })
+    })
+  )
+})
+
+self.addEventListener('activate', (event) => {
+  var cacheKeeplist = [CACHE_NAME]
+
+  event.waitUntil(
+    caches.keys().then((keyList) => {
+      return Promise.all(keyList.map((key) => {
+        if (cacheKeeplist.indexOf(key) === -1) {
+          return caches.delete(key)
+        }
+      }))
+    })
+  )
+})
