@@ -83,6 +83,8 @@ self.addEventListener('message', (event) => {
 const CACHE_NAME = "demo_pwa";
 
 const STATIC_ASSETS = ["/offline.html",
+  ".",
+  "/",
   "logo192.png",
   "logo512.png"
 ];
@@ -98,7 +100,7 @@ self.addEventListener('install', event => {
       .then(cache => {
         cache.addAll(CACHE_ASSETS);
       }
-    )
+      )
   );
 });
 
