@@ -80,93 +80,44 @@ self.addEventListener('message', (event) => {
 
 // Any other custom service worker logic can go here.
 
-const CACHE_NAME = "cache_sample";
+const CACHE_NAME = "demo_pwa";
 
 const STATIC_ASSETS = ["/offline.html"];
 
 let CACHE_ASSETS = STATIC_ASSETS.concat(JSON.parse('HASHURLS'));
 
+console.log(CACHE_ASSETS);
 
-const version = "v0.0.1";
-//install sw at first time
-//place to cache assets to speed up the loading time of web page
-self.addEventListener("install", (event: any) => {
-  console.log("sw install event");
+self.addEventListener('install', event => {
+  console.log("add to cache");
   event.waitUntil(
-    caches.open(version + CACHE_NAME).then((cache) => {
-      console.log("opened cache");
-      console.log(cache);
-      return cache.addAll(CACHE_ASSETS);
-    })
-  );
-});
-//Activate the sw after install
-//Place where old caches are cleared
-self.addEventListener("activate", (event: any) => {
-  console.log("sw activate event");
-  event.waitUntil(
-    caches.keys().then((cacheNames) =>
-      Promise.all(
-        cacheNames
-          .filter((cacheName) => {
-            return cacheName.indexOf(version) !== 0;
-          })
-          .map(function (cachName) {
-            console.log(cachName);
-            return caches.delete(cachName);
-          })
-      )
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        cache.addAll(CACHE_ASSETS);
+      }
     )
   );
 });
 
-const putInCache = async (request: any, response: any) => {
-  const cache = await caches.open(version + CACHE_NAME);
-  await cache.put(request, response);
-};
+self.addEventListener('activate', event => {
+  console.log("activate cache);")
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) {
+            caches.delete(cache);
+          }
+        })
+      )
+    })
+  )
+});
 
-const cacheFirst = async ({ request, fallbackUrl }: any) => {
-  // First try to get the resource from the cache.
-  const responseFromCache = await caches.match(request);
-  if (responseFromCache) {
-    return responseFromCache;
-  }
-
-  // If the response was not found in the cache,
-  // try to get the resource from the network.
-  try {
-    const responseFromNetwork = await fetch(request);
-    // If the network request succeeded, clone the response:
-    // - put one copy in the cache, for the next time
-    // - return the original to the app
-    // Cloning is needed because a response can only be consumed once.
-    putInCache(request, responseFromNetwork.clone());
-    return responseFromNetwork;
-  } catch (error) {
-    // If the network request failed,
-    // get the fallback response from the cache.
-    const fallbackResponse = await caches.match(fallbackUrl);
-    if (fallbackResponse) {
-      return fallbackResponse;
-    }
-    // When even the fallback response is not available,
-    // there is nothing we can do, but we must always
-    // return a Response object.
-    return new Response("Network error happened", {
-      status: 408,
-      headers: { "Content-Type": "text/plain" },
-    });
-  }
-};
-
-
-//listen for requests
-self.addEventListener("fetch", (event: any) => {
-  console.log(event);
+self.addEventListener('fetch', event => {
+  console.log("fetch cache");
   event.respondWith(
-    cacheFirst({
-      request: event.request,
-      fallbackUrl: "/offline.html",
-    }),
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
   );
 });
