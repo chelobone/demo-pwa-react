@@ -9,7 +9,7 @@ const Customer = () => {
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
                 <p>
-                    Customer information
+                    Información de cliente actualizada v4
                 </p>
             </header>
         </div>
