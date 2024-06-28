@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://mfrizcr.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_05e2df37ed5c4c01b3211e9806761a94 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_ced54846ccd0474c9532103f4f013ee6 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_a38261bedbdf43628282b3828a67762c }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_677e957c25cd43818c0d4c413301b584 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: mfrizcr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_05e2df37ed5c4c01b3211e9806761a94 }}/demo-pwa:${{ github.sha }}
+        tags: mfrizcr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_a38261bedbdf43628282b3828a67762c }}/demo-pwa-react:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'demo-pwa-react'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8d509d7c3ca54f18a8fc2f2f85b3cd28 }}
-        images: 'mfrizcr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_05e2df37ed5c4c01b3211e9806761a94 }}/demo-pwa:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_0cc29f2d2b6d4a8484c38672a9e7e06d }}
+        images: 'mfrizcr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_a38261bedbdf43628282b3828a67762c }}/demo-pwa-react:${{ github.sha }}'
