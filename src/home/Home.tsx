@@ -3,6 +3,10 @@ import logo from '../logo.svg';
 import '../App.css';
 
 const Home = () => {
+  const getOnLineStatus = () =>
+    typeof navigator !== 'undefined' && typeof navigator.onLine === 'boolean'
+        ? navigator.onLine
+        : true;
 
   const forceSwUpdate = () => {
     if ('serviceWorker' in navigator) {
@@ -20,7 +24,7 @@ const Home = () => {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          {getOnLineStatus()? "Online":"Offline"}
         </p>
         <label hidden={true} id="btnActualizar">Existe una nueva versión de la app. Favor cierre todas las pestañas asociadas y vuelva a cargar la app.</label>
       </header>

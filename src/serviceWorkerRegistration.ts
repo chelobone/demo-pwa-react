@@ -84,7 +84,6 @@ function registerValidSW(swUrl: string, config?: Config) {
                 control.style.display = 'block';
               }
 
-
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
