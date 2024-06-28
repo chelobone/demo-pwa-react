@@ -1,0 +1,51 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - demo-pwa-react
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to registry
+      uses: docker/login-action@v2
+      with:
+        registry: https://mfrizcr.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_05e2df37ed5c4c01b3211e9806761a94 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_ced54846ccd0474c9532103f4f013ee6 }}
+
+    - name: Build and push container image to registry
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        tags: mfrizcr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_05e2df37ed5c4c01b3211e9806761a94 }}/demo-pwa:${{ github.sha }}
+        file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'demo-pwa-react'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8d509d7c3ca54f18a8fc2f2f85b3cd28 }}
+        images: 'mfrizcr.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_05e2df37ed5c4c01b3211e9806761a94 }}/demo-pwa:${{ github.sha }}'
